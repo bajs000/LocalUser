@@ -153,10 +153,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         self.view.layoutIfNeeded()
         
         userTitleList = ["0":[["title":""]],
-                         "1":[["title":"分享有礼","detail":"","icon":"main-user-gift"]],
-                         "2":[["title":"我的账户","detail":"编辑地址、设置收货款账户","icon":"main-user-account"],["title":"我的钱包","detail":"余额查询及优惠券","icon":"other-price"]],
-                         "3":[["title":"消息通知","detail":"","icon":"main-user-msg"],["title":"使用通知","detail":"常见问题","icon":"other-notice"]],
-                         "4":[["title":"联系客服","detail":"","icon":"main-user-service"],["title":"设置","detail":"","icon":"main-user-setting"]]]
+                         "1":[["title":"历史订单","detail":"","icon":"main-user-gift"]],
+                         "2":[["title":"分享有礼","detail":"","icon":"main-user-gift"]],
+                         "3":[["title":"我的账户","detail":"编辑地址、设置收货款账户","icon":"main-user-account"],["title":"我的钱包","detail":"余额查询及优惠券","icon":"other-price"]],
+                         "4":[["title":"消息通知","detail":"","icon":"main-user-msg"],["title":"使用通知","detail":"常见问题","icon":"other-notice"]],
+                         "5":[["title":"联系客服","detail":"","icon":"main-user-service"],["title":"设置","detail":"","icon":"main-user-setting"]]]
 //        self.bubbleBg.image = self.bubbleBg.image?.resizableImage(withCapInsets: UIEdgeInsetsMake(2, 80, 6, 2))
     }
 
@@ -244,11 +245,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     //MARK:- UITableViewDelegate
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section <= 1 {
+        if section <= 2 {
             return 1
         }else{
             return 2
@@ -300,28 +301,30 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.dismissUserCenter {
-            if indexPath.section == 3{
+            if indexPath.section == 4{
                 if indexPath.row == 0 {
                     self.performSegue(withIdentifier: "msgPush", sender: indexPath)
                 }else{
                     self.performSegue(withIdentifier: "usePush", sender: indexPath)
                 }
-            }else if indexPath.section == 2 {
+            }else if indexPath.section == 3 {
                 if indexPath.row == 0 {
                     self.performSegue(withIdentifier: "accountPush", sender: indexPath)
                 }else{
                     self.performSegue(withIdentifier: "walletPush", sender: indexPath)
                 }
-            }else if indexPath.section == 4 {
+            }else if indexPath.section == 5 {
                 if indexPath.row == 0 {
                 
                 }else{
                     self.performSegue(withIdentifier: "settingPush", sender: indexPath)
                 }
-            }else if indexPath.section == 1 {
+            }else if indexPath.section == 2 {
                 self.performSegue(withIdentifier: "sharePush", sender: indexPath)
             }else if indexPath.section == 0 {
                 self.performSegue(withIdentifier: "orderPush", sender: nil)
+            }else if indexPath.section == 1 {
+                self.performSegue(withIdentifier: "historyPush", sender: indexPath)
             }
         }
     }

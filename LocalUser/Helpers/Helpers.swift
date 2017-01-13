@@ -29,4 +29,21 @@ class Helpers : NSObject {
         return superView
     }
     
+    public class func findClass(_ className:AnyClass,at parentView:UIView) -> UIView? {
+        var view:UIView? = nil
+        for v in parentView.subviews {
+            if v.isKind(of: className) {
+                view = v
+                break
+            }else{
+                view = self.findClass(className, at: v)
+                if view != nil {
+                    break
+                }
+            }
+        }
+        
+        return view
+    }
+    
 }
