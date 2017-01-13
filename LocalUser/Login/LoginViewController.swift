@@ -82,7 +82,7 @@ class LoginViewController: UIViewController {
     
     func requestLogin() -> Void {
         SVProgressHUD.show()
-        NetworkModel.request(["user_phone":phoneNum.text ?? "","password":password.text ?? ""], url: "/logo", complete: {(dic) -> Void in
+        NetworkModel.request(["user_phone":phoneNum.text ?? "","password":password.text ?? "","is_bess":"1"], url: "/logo", complete: {(dic) -> Void in
             SVProgressHUD.dismiss()
             if Int((dic as! NSDictionary)["code"] as! String) == 200 {
                 UserDefaults.standard.set((dic as! NSDictionary)["user_id"], forKey: "USERID")

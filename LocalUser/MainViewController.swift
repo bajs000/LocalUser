@@ -95,6 +95,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                 let dict = dic as! NSDictionary
                 let userDefault = UserDefaults.standard
                 if Int(dict["code"] as! String) == 200 {
+                    UserModel.shareInstance.logout()
                     if !(((dict["info"] as! NSDictionary)["for_address"] as! NSObject).isKind(of: NSNull.self)) &&  ((dict["info"] as! NSDictionary)["for_address"] as! String).characters.count > 0{
                         userDefault.set(((dict["info"] as! NSDictionary)["for_address"] as! String), forKey: "ADDRESS")
                     }

@@ -8,10 +8,12 @@
 
 import UIKit
 import SDWebImage
+import SVProgressHUD
 
-class UserInfoViewController: UITableViewController {
+class UserInfoViewController: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
     var titleArr:[[String:String]]?
+    var avatar:UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +22,7 @@ class UserInfoViewController: UITableViewController {
         self.title = "我的账户"
         let user = UserModel.shareInstance
         self.titleArr = [["title":"头像","detail":user.avatar],
-                         ["title":"商家名","detail":""],
+                         ["title":"商家名","detail":user.userName],
                          ["title":"地址管理","detail":user.address],
                          ["title":"修改密码","detail":""],
                          ["title":"绑定手机号","detail":user.userPhone],
@@ -60,11 +62,17 @@ class UserInfoViewController: UITableViewController {
             cell.viewWithTag(2)?.layer.borderWidth = 4
             cell.viewWithTag(2)?.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
             cell.viewWithTag(2)?.layer.cornerRadius = 28
-            (cell.viewWithTag(2) as! UIImageView).sd_setImage(with: URL(string: UserModel.shareInstance.avatar), placeholderImage: UIImage(named: "main-user-default-icon"))
+            if avatar != nil {
+                (cell.viewWithTag(2) as! UIImageView).image = avatar
+            }else{
+                (cell.viewWithTag(2) as! UIImageView).sd_setImage(with: URL(string: UserModel.shareInstance.avatar), placeholderImage: UIImage(named: "main-user-default-icon"))
+            }
         }else{
             (cell.viewWithTag(2) as! UILabel).text = titleArr?[indexPath.row]["detail"]
             if indexPath.row == 4 {
-                (cell.viewWithTag(2) as! UILabel).text = ((cell.viewWithTag(2) as! UILabel).text! as NSString).replacingCharacters(in: NSMakeRange(3, 4), with: "****")
+                if ((cell.viewWithTag(2) as! UILabel).text?.characters.count)! > 7 {
+                    (cell.viewWithTag(2) as! UILabel).text = ((cell.viewWithTag(2) as! UILabel).text! as NSString).replacingCharacters(in: NSMakeRange(3, 4), with: "****")
+                }
             }
         }
         return cell
@@ -73,6 +81,54 @@ class UserInfoViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 5 {
             self.performSegue(withIdentifier: "accountPush", sender: indexPath)
+        }else if indexPath.row == 0 {
+            let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let cameraAction = UIAlertAction(title: "相机", style: .default, handler: { (alertAction) in
+                let imgPicker = UIImagePickerController.init()
+                imgPicker.sourceType = .camera
+                imgPicker.delegate = self
+                self.present(imgPicker, animated: true, completion: nil)
+            })
+            let photoAction = UIAlertAction(title: "相册", style: .default, handler: { (alertAction) in
+                let imgPicker = UIImagePickerController.init()
+                imgPicker.sourceType = .savedPhotosAlbum
+                imgPicker.delegate = self
+                self.present(imgPicker, animated: true, completion: nil)
+            })
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: { (alertAction) in
+                
+            })
+            sheet.addAction(cameraAction)
+            sheet.addAction(photoAction)
+            sheet.addAction(cancelAction)
+            self.present(sheet, animated: true, completion: nil)
+        }else if indexPath.row == 2 {
+            self.performSegue(withIdentifier: "placePush", sender: indexPath)
+        }else if indexPath.row == 1 || indexPath.row == 3 || indexPath.row == 4 {
+            self.performSegue(withIdentifier: "updatePush", sender: indexPath)
+        }
+    }
+    
+    // MARK: - UIImagePickerController
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        self.requestUploadAvatar(info[UIImagePickerControllerOriginalImage] as! UIImage)
+        avatar = (info[UIImagePickerControllerOriginalImage] as! UIImage)
+        self.tableView.reloadData()
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func requestUploadAvatar(_ image:UIImage) {
+        SVProgressHUD.show()
+        UploadNetwork.request(["mnique":UserModel.shareInstance.mnique], data: image,paramName: "head_graphic", url: "/user_edit") { (dic) in
+            if Int((dic as! NSDictionary)["code"] as! String) == 200 {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "UPDATEINFO"), object: nil)
+            }else{
+                SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
+            }
         }
     }
     
@@ -111,14 +167,25 @@ class UserInfoViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "updatePush" {
+            let vc = segue.destination as! UpdateViewController
+            if (sender as! IndexPath).row == 1 {
+                vc.title = "商户名"
+                vc.type = .name
+            }else if (sender as! IndexPath).row == 3 {
+                vc.title = "修改密码"
+                vc.type = .password
+            }else if (sender as! IndexPath).row == 4 {
+                vc.title = "修改手机"
+                vc.type = .phone
+            }
+        }
     }
-    */
+    
 
 }

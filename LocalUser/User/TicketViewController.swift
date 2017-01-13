@@ -73,6 +73,18 @@ class TicketViewController: UITableViewController {
         self.currentIndexPath = indexPath
         self.tableView.reloadData()
     }
+    
+    @IBAction func sureTicketBtnDidClick(_ sender: Any) {
+        if self.currentIndexPath == nil {
+            SVProgressHUD.showError(withStatus: "请选择优惠券")
+        }else{
+            if self.completeChoseTicket != nil {
+                let dic = self.ticketList?[(self.currentIndexPath?.row)!] as! NSDictionary
+                completeChoseTicket!(dic)
+            }
+            _ = self.navigationController?.popViewController(animated: true)
+        }
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

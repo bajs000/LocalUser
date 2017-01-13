@@ -45,6 +45,7 @@ class SureOrderViewController: UIViewController, UITableViewDelegate, UITableVie
         self.commitBtn.layer.cornerRadius = 16
         self.bottomViewHeight.constant = 49
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "other-notice"), style: .plain, target: self, action: #selector(noticeBtnDidClick(_:)))
+        self.datePicker.minimumDate = Date()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -248,12 +249,16 @@ class SureOrderViewController: UIViewController, UITableViewDelegate, UITableVie
     func requestSureOrder() -> Void {
         SVProgressHUD.show()
         let location:CLLocationCoordinate2D = self.buyPlaceDic?.allValues[0] as! CLLocationCoordinate2D
-        NetworkModel.request(["order_number":(self.orderId)!,
-                              "t_longitude":(self.accpetPlaceDic?["longitude"] as! String),
-                              "t_latitude":(self.accpetPlaceDic?["latitude"] as! String),
-                              "longitude":String(location.longitude),
-                              "latitude":String(location.latitude),
-                              "type":(self.orderType)!], url: "/order_cost") { (dic) in
+        var dic = ["order_number":(self.orderId)!,
+                   "t_longitude":(self.accpetPlaceDic?["longitude"] as! String),
+                   "t_latitude":(self.accpetPlaceDic?["latitude"] as! String),
+                   "longitude":String(location.longitude),
+                   "latitude":String(location.latitude),
+                   "type":(self.orderType)!]
+        if self.ticketDic != nil {
+            dic["coup_id"] = (self.ticketDic?["coup_id"] as! String)
+        }
+        NetworkModel.request(dic as NSDictionary, url: "/order_cost") { (dic) in
                                     SVProgressHUD.dismiss()
                                     print(dic)
                                 self.performSegue(withIdentifier: "payPush", sender: dic)

@@ -16,8 +16,13 @@ class RegistViewController: UIViewController {
     @IBOutlet weak var bottom: NSLayoutConstraint!
     @IBOutlet weak var phoneNum: PhoneTextField!
     @IBOutlet weak var verifyText: CodeTextField!
+    @IBOutlet weak var userName: PhoneTextField!
+    @IBOutlet weak var passwordText: PhoneTextField!
+    @IBOutlet weak var surePwdText: PhoneTextField!
     
     var bess:String = "0"
+    var verify:String?
+    var gender:String = "女士"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +63,10 @@ class RegistViewController: UIViewController {
     }
     
     func verifyBtnDidClick() -> Void {
+        if self.phoneNum.text?.characters.count != 11 {
+            SVProgressHUD.showError(withStatus: "请正确输入手机号")
+            return
+        }
         self.requestVerify()
     }
     
@@ -93,11 +102,39 @@ class RegistViewController: UIViewController {
         }
     }
     
+    @IBAction func registBtnDidClick(_ sender: Any) {
+        if self.verify == nil {
+            SVProgressHUD.showError(withStatus: "请先发送验证码")
+            return
+        }
+        if self.verify != self.verifyText.text {
+            SVProgressHUD.showError(withStatus: "请正确输入验证码")
+            return
+        }
+        if bess == "1" {
+            if (self.userName.text?.characters.count)! == 0 {
+                SVProgressHUD.showError(withStatus: "请输入用户名")
+                return
+            }
+            if (self.passwordText.text?.characters.count)! < 6 {
+                SVProgressHUD.showError(withStatus: "请输入6位以上密码")
+                return
+            }
+            if self.passwordText.text != self.surePwdText.text {
+                SVProgressHUD.showError(withStatus: "两次密码不一致")
+                return
+            }
+        }
+        self.requestRegist()
+    }
+    
     @IBAction func sexBtnDidClick(_ sender: UIButton) {
         sender.isSelected = true
         if sender.tag == 1 {
+            gender = "先生"
             (sender.superview?.viewWithTag(2) as! UIButton).isSelected = false
         }else{
+            gender = "女士"
             (sender.superview?.viewWithTag(1) as! UIButton).isSelected = false
         }
     }
@@ -112,21 +149,33 @@ class RegistViewController: UIViewController {
     */
     
     func requestRegist() -> Void {
+        var dic:NSDictionary?
         if bess == "0" {
-            
+            dic = ["phone":phoneNum.text!,"is_bess":bess]
+        }else{
+            dic = ["phone":phoneNum.text!,"is_bess":bess,"password":passwordText.text!,"gender":gender,"user_name":self.userName.text!]
         }
         SVProgressHUD.show()
-//        NetworkModel.request(["user_phone":], url: "/register") { (dic) in
-//            SVProgressHUD.dismiss()
-//        }
+        NetworkModel.request(dic!, url: "/register") { (dic) in
+            if Int((dic as! NSDictionary)["code"] as! String) == 200 {
+                SVProgressHUD.dismiss()
+                UserDefaults.standard.set((dic as! NSDictionary)["user_id"], forKey: "USERID")
+                UserDefaults.standard.set((dic as! NSDictionary)["mnique"], forKey: "MNIQUE")
+                UserDefaults.standard.synchronize()
+                _ = self.navigationController?.popToRootViewController(animated: true)
+            }else{
+                SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
+            }
+        }
     }
 
     func requestVerify() -> Void {
         SVProgressHUD.show()
-        NetworkModel.request(["phone":phoneNum.text ?? ""], url: "/verify") { (dic) in
+        NetworkModel.request(["phone":phoneNum.text ?? "","is_bess":bess], url: "/verify") { (dic) in
             SVProgressHUD.dismiss()
             if Int((dic as! NSDictionary)["code"] as! String) == 200 {
                 self.verifyText.startCount()
+                self.verify = (dic as! NSDictionary)["verify"] as? String
                 print(dic)
             }else{
                 SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)

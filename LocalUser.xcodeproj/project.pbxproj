@@ -43,6 +43,7 @@
 		66C17A8E1E1B35B800D7896B /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C17A8D1E1B35B800D7896B /* SettingViewController.swift */; };
 		66C9FB7D1E1DE521003A9B07 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C9FB7C1E1DE521003A9B07 /* WebViewController.swift */; };
 		66C9FB801E1DF480003A9B07 /* OrderListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C9FB7F1E1DF480003A9B07 /* OrderListViewController.swift */; };
+		66E1C05F1E2874A700A0E56A /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E1C05E1E2874A700A0E56A /* UpdateViewController.swift */; };
 		66F198D21E276C9700A56C2D /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 66F198D01E276C9700A56C2D /* AlipaySDK.bundle */; };
 		66F198D31E276C9700A56C2D /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F198D11E276C9700A56C2D /* AlipaySDK.framework */; };
 		66F198D51E276CED00A56C2D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F198D41E276CED00A56C2D /* libz.tbd */; };
@@ -110,6 +111,7 @@
 		66C17A8D1E1B35B800D7896B /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		66C9FB7C1E1DE521003A9B07 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		66C9FB7F1E1DF480003A9B07 /* OrderListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderListViewController.swift; sourceTree = "<group>"; };
+		66E1C05E1E2874A700A0E56A /* UpdateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateViewController.swift; sourceTree = "<group>"; };
 		66F198D01E276C9700A56C2D /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		66F198D11E276C9700A56C2D /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
 		66F198D41E276CED00A56C2D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -211,6 +213,7 @@
 				66A4A25E1E1B72E700C7DF70 /* AddAccountViewController.swift */,
 				66A4A2601E1B757C00C7DF70 /* BankViewController.swift */,
 				66A4A2621E1B7F5E00C7DF70 /* ShareViewController.swift */,
+				66E1C05E1E2874A700A0E56A /* UpdateViewController.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 				66AD01F91E0910BC0094231B /* Helpers.swift in Sources */,
 				66AD02031E0921CE0094231B /* CustomAlert.swift in Sources */,
 				662250401E162F1500FD03C6 /* MsgCenterViewController.swift in Sources */,
+				66E1C05F1E2874A700A0E56A /* UpdateViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

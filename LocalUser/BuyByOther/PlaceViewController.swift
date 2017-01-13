@@ -73,8 +73,10 @@ class PlaceViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dic = self.placeList?[indexPath.section]
-        self.completeSelectPlace!(dic!)
-        _ = self.navigationController?.popViewController(animated: true)
+        if self.completeSelectPlace != nil {
+            self.completeSelectPlace!(dic!)
+            _ = self.navigationController?.popViewController(animated: true)
+        }
     }
 
     func deletePlaceBtnDidClick(_ sender:UIButton) -> Void {

@@ -16,6 +16,7 @@ class ExpressViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tableViewBottom: NSLayoutConstraint!
     @IBOutlet var dateInputView: UIView!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var totalMoney: UILabel!
     
     var textView:UITextView?
     var placeholder:UILabel?
@@ -47,7 +48,9 @@ class ExpressViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.estimatedRowHeight = 100
         
         self.datePicker.minimumDate = Date()
-    
+        let temp = NSMutableAttributedString.init(string: "费用0.00元起")
+        temp.addAttribute(NSForegroundColorAttributeName, value: UIColor.colorWithHexString(hex: "ff9000"), range: NSMakeRange(2, 4))
+        self.totalMoney.attributedText = temp
     }
     
     override func viewWillAppear(_ animated: Bool) {

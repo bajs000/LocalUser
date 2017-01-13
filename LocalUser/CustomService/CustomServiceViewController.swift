@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class CustomServiceViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var commitOrderBtn: UIButton!
     @IBOutlet weak var tableViewBottom: NSLayoutConstraint!
+    @IBOutlet weak var totalMoney: UILabel!
     
     var textView:UITextView?
     var placeholder:UILabel?
     var buyPlaceDic:NSDictionary?
+    var accpetPlaceDic:NSDictionary?
+    var moneyText:UITextField?
+    var phoneNumText:UITextField?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +29,10 @@ class CustomServiceViewController: UIViewController, UITableViewDelegate, UITabl
         self.commitOrderBtn.layer.cornerRadius = 16
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 100
+        
+        let temp = NSMutableAttributedString.init(string: "费用0.00元起")
+        temp.addAttribute(NSForegroundColorAttributeName, value: UIColor.colorWithHexString(hex: "ff9000"), range: NSMakeRange(2, 4))
+        self.totalMoney.attributedText = temp
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +107,16 @@ class CustomServiceViewController: UIViewController, UITableViewDelegate, UITabl
             }else {
                 (cell.viewWithTag(11) as! UILabel).textColor = UIColor.colorWithHexString(hex: "CCCCCC")
             }
+            if self.accpetPlaceDic != nil {
+                (cell.viewWithTag(12) as! UILabel).text = self.accpetPlaceDic?["address"] as? String
+                (cell.viewWithTag(12) as! UILabel).textColor = UIColor.colorWithHexString(hex: "333333")
+            }else {
+                (cell.viewWithTag(12) as! UILabel).textColor = UIColor.colorWithHexString(hex: "CCCCCC")
+            }
+        }else if indexPath.section == 2 {
+            self.phoneNumText = (cell.viewWithTag(11) as! UITextField)
+            self.moneyText = (cell.viewWithTag(12) as! UITextField)
+            (cell.viewWithTag(99) as! UIButton).addTarget(self, action: #selector(dontKownMoneyBtnDidClick(_:)), for: .touchUpInside)
         }
         return cell
     }
@@ -116,6 +135,37 @@ class CustomServiceViewController: UIViewController, UITableViewDelegate, UITabl
         self.tableView.endUpdates()
     }
     
+    func dontKownMoneyBtnDidClick(_ sender:UIButton) {
+        sender.isSelected = !sender.isSelected
+        if sender.isSelected {
+            self.moneyText?.text = "0"
+        }
+    }
+    
+    @IBAction func sureBtnDidClick(_ sender: UIButton) {
+        if self.textView?.text.characters.count == 0 {
+            SVProgressHUD.showError(withStatus: "请输入购买内容")
+            return
+        }
+        if self.buyPlaceDic == nil {
+            SVProgressHUD.showError(withStatus: "请选择购买地")
+            return
+        }
+        if self.accpetPlaceDic == nil {
+            SVProgressHUD.showError(withStatus: "请选择送货地")
+            return
+        }
+        if self.phoneNumText?.text?.characters.count == 0 {
+            SVProgressHUD.showError(withStatus: "请输入联系人电话")
+            return
+        }
+        if self.moneyText?.text?.characters.count == 0 {
+            SVProgressHUD.showError(withStatus: "请输入金额")
+            return
+        }
+        self.requestBuyByOther()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "locationPush" {
             let vc = segue.destination as! MapLocationViewController
@@ -123,6 +173,18 @@ class CustomServiceViewController: UIViewController, UITableViewDelegate, UITabl
                 self.buyPlaceDic = [locationName:location]
                 self.tableView.reloadData()
             }
+        }else if segue.identifier == "placePush" {
+            let vc = segue.destination as! PlaceViewController
+            vc.completeSelectPlace = {(dic) -> Void in
+                self.accpetPlaceDic = dic
+                self.tableView.reloadData()
+            }
+        }else if segue.identifier == "surePush" {
+            let vc = segue.destination as! SureOrderViewController
+            vc.orderId = (sender as! NSDictionary)["order_number"] as? String
+            vc.accpetPlaceDic = self.accpetPlaceDic
+            vc.buyPlaceDic = self.buyPlaceDic
+            vc.orderType = "3"
         }
     }
     
@@ -136,4 +198,36 @@ class CustomServiceViewController: UIViewController, UITableViewDelegate, UITabl
     }
     */
 
+    func requestBuyByOther() -> Void {
+        SVProgressHUD.show()
+        let location:CLLocationCoordinate2D = self.buyPlaceDic?.allValues[0] as! CLLocationCoordinate2D
+        NetworkModel.request(["t_longitude":(self.accpetPlaceDic?["longitude"] as! String),"t_latitude":(self.accpetPlaceDic?["latitude"] as! String),"longitude":String(location.longitude),"latitude":String(location.latitude),"type":"1","charge_money":((self.moneyText?.text)!)], url: "/calculating_cost") { (dic) in
+            let dictionary = (dic as! NSDictionary)
+            let address = (self.accpetPlaceDic?["add_province"] as! String) + (self.accpetPlaceDic?["add_city"] as! String) + (self.accpetPlaceDic?["add_area"] as! String) + (self.accpetPlaceDic?["address"] as! String)
+            let dict = ["money":(dictionary["money"] as! String),
+                        "t_longitude":(self.accpetPlaceDic?["longitude"] as! String),
+                        "t_latitude":(self.accpetPlaceDic?["latitude"] as! String),
+                        "longitude":String(location.longitude),
+                        "latitude":String(location.latitude),
+                        "user_id":UserModel.shareInstance.userId,
+                        "addre_id":(self.accpetPlaceDic?["addre_id"] as! String),
+                        "goods_name":(self.textView?.text)!,
+                        "buy_address":(self.buyPlaceDic?.allKeys[0] as! String),
+                        "dilometers":(dictionary["distance"] as! NSNumber).stringValue,
+                        "de_address":address,
+                        "charge_money":(self.moneyText?.text)!,
+                        "contact_number":(self.phoneNumText?.text)!,
+                        "type":"3"]
+            NetworkModel.request(dict as NSDictionary, url: "/cart_add_purchasing", complete: {(dic) in
+                if Int((dic as! NSDictionary)["code"] as! String) == 200 {
+                    SVProgressHUD.dismiss()
+                    self.performSegue(withIdentifier: "surePush", sender: dic)
+                }else{
+                    SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
+                }
+            })
+            
+        }
+    }
+    
 }
