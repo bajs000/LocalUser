@@ -25,7 +25,7 @@ class CustomServiceViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "定制服务"
+        self.title = "订制服务"
         self.commitOrderBtn.layer.cornerRadius = 16
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 100

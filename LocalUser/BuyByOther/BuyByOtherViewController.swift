@@ -17,7 +17,9 @@ class BuyByOtherViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var totalMoney: UILabel!
     
     var textView:UITextView?
+    var remarkTextView:UITextView?
     var placeholder:UILabel?
+    var remarkPlaceholder:UILabel?
     var buyPlaceDic:NSDictionary?
     var accpetPlaceDic:NSDictionary?
     var phoneNumText:UITextField?
@@ -70,7 +72,7 @@ class BuyByOtherViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -93,6 +95,8 @@ class BuyByOtherViewController: UIViewController, UITableViewDelegate, UITableVi
             cellIdentify = "placeCell"
         }else if indexPath.section == 2 {
             cellIdentify = "detailCell"
+        }else if indexPath.section == 3{
+            cellIdentify = "remarkCell"
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentify, for: indexPath)
         if indexPath.section == 0 {
@@ -119,6 +123,10 @@ class BuyByOtherViewController: UIViewController, UITableViewDelegate, UITableVi
             self.phoneNumText = (cell.viewWithTag(11) as! UITextField)
             self.moneyText = (cell.viewWithTag(12) as! UITextField)
             (cell.viewWithTag(99) as! UIButton).addTarget(self, action: #selector(dontKownMoneyBtnDidClick(_:)), for: .touchUpInside)
+        }else {
+            self.remarkTextView = cell.viewWithTag(1) as? UITextView
+            self.remarkTextView?.delegate = self
+            self.remarkPlaceholder = cell.viewWithTag(2) as? UILabel
         }
         return cell
     }
@@ -143,10 +151,18 @@ class BuyByOtherViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text.characters.count > 0 {
-            placeholder?.isHidden = true
-        }else{
-            placeholder?.isHidden = false
+        if textView == self.textView {
+            if textView.text.characters.count > 0 {
+                placeholder?.isHidden = true
+            }else{
+                placeholder?.isHidden = false
+            }
+        }else {
+            if textView.text.characters.count > 0 {
+                remarkPlaceholder?.isHidden = true
+            }else{
+                remarkPlaceholder?.isHidden = false
+            }
         }
         self.tableView.beginUpdates()
         self.tableView.endUpdates()

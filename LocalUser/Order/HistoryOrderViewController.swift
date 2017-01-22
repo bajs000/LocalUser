@@ -24,6 +24,7 @@ class HistoryOrderViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var datePicker: UIDatePicker!
     
     var showMore = false
+    var currentTextField: UITextField?
     var orderList:[NSDictionary] = [NSDictionary]()
     
     override func viewDidLoad() {
@@ -41,15 +42,41 @@ class HistoryOrderViewController: UIViewController, UITableViewDelegate, UITable
         btn.isUserInteractionEnabled = true
         btn.isEnabled = true
         
-        self.requestHistory()
+        self.requestHistory(nil)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    @IBAction func textFieldEditDidBegin(_ sender: UITextField) {
+        currentTextField = sender
+        let dateFormat = DateFormatter.init()
+        dateFormat.dateFormat = "yyyy-MM-dd"
+        if (self.beginText.text?.characters.count)! > 0 && sender == self.endText {
+            self.datePicker.minimumDate = dateFormat.date(from: self.beginText.text!)
+        }
+    }
+    
     @IBAction func inputViewBtnDidClick(_ sender: UIButton) {
         UIApplication.shared.keyWindow?.endEditing(true)
+        if sender.tag == 1 {
+            let dateFormat = DateFormatter.init()
+            dateFormat.dateFormat = "yyyy-MM-dd"
+            currentTextField?.text = dateFormat.string(from: self.datePicker.date)
+        }
+    }
+    
+    @IBAction func expertSureBtnDidClick(_ sender: Any) {
+        if (self.beginText.text?.characters.count) == 0 {
+            SVProgressHUD.showError(withStatus: "请选择开始时间")
+            return
+        }
+        if (self.endText.text?.characters.count) == 0 {
+            SVProgressHUD.showError(withStatus: "请选择开始时间")
+            return
+        }
+        self.requestHistory(sender)
     }
     
     // MARK: - UISearchBarDelegate
@@ -148,9 +175,13 @@ class HistoryOrderViewController: UIViewController, UITableViewDelegate, UITable
     }
     */
     
-    func requestHistory() -> Void {
+    func requestHistory(_ sender:Any?) -> Void {
         SVProgressHUD.show()
-        NetworkModel.request(["b_user_id":UserModel.shareInstance.userId], url: "/store_order_list") { (dic) in
+        var dic = ["b_user_id":UserModel.shareInstance.userId,"state":"5"]
+        if sender != nil {
+            dic = ["b_user_id":UserModel.shareInstance.userId,"start_time":self.beginText.text!,"end_time":self.endText.text!,"state":"5"]
+        }
+        NetworkModel.request(dic as NSDictionary, url: "/user_order_list") { (dic) in
             if Int((dic as! NSDictionary)["code"] as! String) == 200 {
                 self.orderList = (dic as! NSDictionary)["list"] as! [NSDictionary]
                 self.tableView.reloadData()
@@ -167,6 +198,11 @@ class HistoryOrderViewController: UIViewController, UITableViewDelegate, UITable
                     self.cancelNum.text = "0"
                 }
             }else{
+                self.orderList = [NSDictionary]()
+                self.totalNum.text = String(self.orderList.count)
+                self.finishNum.text = "0"
+                self.cancelNum.text = "0"
+                self.tableView.reloadData()
                 SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
             }
         }

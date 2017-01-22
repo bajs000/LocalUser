@@ -181,6 +181,12 @@ class SureOrderViewController: UIViewController, UITableViewDelegate, UITableVie
             self.textView = cell.viewWithTag(1) as? UITextView
             self.textView?.delegate = self
             self.placeholder = cell.viewWithTag(2) as? UILabel
+        }else if indexPath.section == 4 {
+            if indexPath.row == 1 {
+                if self.ticketDic != nil {
+                    (cell.viewWithTag(3) as! UILabel).text = self.ticketDic?["name"] as? String
+                }
+            }
         }
         return cell
     }
