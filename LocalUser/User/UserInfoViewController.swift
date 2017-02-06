@@ -87,12 +87,14 @@ class UserInfoViewController: UITableViewController, UINavigationControllerDeleg
                 let imgPicker = UIImagePickerController.init()
                 imgPicker.sourceType = .camera
                 imgPicker.delegate = self
+                imgPicker.allowsEditing = true
                 self.present(imgPicker, animated: true, completion: nil)
             })
             let photoAction = UIAlertAction(title: "相册", style: .default, handler: { (alertAction) in
                 let imgPicker = UIImagePickerController.init()
                 imgPicker.sourceType = .savedPhotosAlbum
                 imgPicker.delegate = self
+                imgPicker.allowsEditing = true
                 self.present(imgPicker, animated: true, completion: nil)
             })
             let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: { (alertAction) in

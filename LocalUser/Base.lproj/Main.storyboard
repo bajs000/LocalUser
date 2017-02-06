@@ -270,6 +270,7 @@
                         <outlet property="pageControl" destination="zit-im-758" id="qB7-Oj-vfA"/>
                         <outlet property="tableView" destination="PTm-et-MZa" id="4Qx-Tp-w99"/>
                         <outlet property="tableViewLeading" destination="lBX-2b-drO" id="UC3-D8-vA4"/>
+                        <outlet property="userInfoBarBtn" destination="J2a-Rb-U2z" id="LwX-uN-qvO"/>
                         <outlet property="userNameBtn" destination="haL-mQ-ZsS" id="NRn-ea-uAs"/>
                         <outlet property="userView" destination="pXV-YJ-Vv7" id="t9q-a8-ZfA"/>
                         <segue destination="ivJ-dH-bkL" kind="show" identifier="loginPush" id="vHu-KS-MwM"/>

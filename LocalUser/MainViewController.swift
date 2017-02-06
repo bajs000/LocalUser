@@ -30,11 +30,13 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var userNameBtn: UIButton!
     @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var userInfoBarBtn: UIBarButtonItem!
     
     var locService:BMKLocationService?
     var geoCodeSearch:BMKGeoCodeSearch?
     var userTitleList:[String:[[String:String]]]?
     var bannerDatasource:[NSDictionary] = [NSDictionary]()
+    var showMenu:Bool = false
     
     @IBAction func userInfoBtnDidClick(_ sender: Any) {
         if UserDefaults.standard.object(forKey: "MNIQUE") != nil {
@@ -129,6 +131,9 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
 //                    self.avatarBtn.sd_setImage(with: URL(string: UserModel.shareInstance.avatar), for: .normal, placeholderImage: UIImage(named: "main-user-bg"))
                 }else{
                     SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
+                }
+                if self.showMenu {
+                    self.userInfoBtnDidClick(self.userInfoBarBtn)
                 }
             }
         }
@@ -301,6 +306,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.dismissUserCenter {
+            self.showMenu = true
             if indexPath.section == 4{
                 if indexPath.row == 0 {
                     self.performSegue(withIdentifier: "msgPush", sender: indexPath)
