@@ -17,6 +17,7 @@ PODS:
   - BaiduMapKit (3.2)
   - Masonry (1.0.2)
   - MJRefresh (3.1.12)
+  - QQOpenSDK (3.1.3)
   - ReactiveCocoa (2.5):
     - ReactiveCocoa/UI (= 2.5)
   - ReactiveCocoa/Core (2.5):
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - BaiduMapKit
   - Masonry
   - MJRefresh
+  - QQOpenSDK
   - ReactiveCocoa (~> 2.5)
   - SDWebImage
   - SVProgressHUD
@@ -45,11 +47,12 @@ SPEC CHECKSUMS:
   BaiduMapKit: c23aee47be89b2b939a92acfd06627114e897662
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  QQOpenSDK: f16caf9d59e83256aa7d94b468d7e5c3845f0f2a
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   YTKNetwork: c4b0c29c9d639dc050d475de69ee626d53eac598
 
-PODFILE CHECKSUM: a49e943e42a472a244ee90a33ce959988302bbeb
+PODFILE CHECKSUM: 366996387f58db5a09f44eee0f2c9fba8c256fe4
 
 COCOAPODS: 1.2.0.beta.1

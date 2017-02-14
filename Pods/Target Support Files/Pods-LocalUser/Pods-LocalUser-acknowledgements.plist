@@ -132,6 +132,17 @@ THE SOFTWARE.</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>® 1998 - 2016 Tencent All Rights Reserved.
+</string>
+			<key>License</key>
+			<string>LGPL</string>
+			<key>Title</key>
+			<string>QQOpenSDK</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>**Copyright (c) 2012 - 2015, GitHub, Inc.**
 **All rights reserved.**
 

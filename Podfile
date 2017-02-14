@@ -11,4 +11,5 @@ target 'LocalUser' do
   pod 'ReactiveCocoa', '~> 2.5'
   pod 'BaiduMapKit' 
   pod 'MJRefresh'
+  pod 'QQOpenSDK'
 end

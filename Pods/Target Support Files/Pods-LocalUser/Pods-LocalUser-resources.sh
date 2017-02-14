@@ -78,9 +78,11 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/Resources/mapapi.bundle"
+  install_resource "QQOpenSDK/sdk/TencentOpenApi_IOS_Bundle.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/Resources/mapapi.bundle"
+  install_resource "QQOpenSDK/sdk/TencentOpenApi_IOS_Bundle.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
