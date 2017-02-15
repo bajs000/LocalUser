@@ -80,7 +80,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
                             UserDefaults.standard.set((dic as! NSDictionary)["mnique"], forKey: "MNIQUE")
                             UserDefaults.standard.synchronize()
                             let nav = self.window?.rootViewController as! UINavigationController
-                            nav.popViewController(animated: true)
+//                            nav.popViewController(animated: true)
+                            
+                            if ((dic as! NSDictionary)["user_phone"] as! String).characters.count == 0 {
+                                nav.pushViewController(BindingPhoneViewController.getInstance(), animated: true)
+                            }else {
+                                _ = nav.popToRootViewController(animated: true)
+                            }
+                            
+                            
                         }else{
                             SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
                         }

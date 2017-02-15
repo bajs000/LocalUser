@@ -3377,6 +3377,7 @@
                         <outlet property="loginBtn" destination="pSr-8n-SLo" id="Xmc-hX-yDF"/>
                         <outlet property="password" destination="NTq-bF-nyA" id="gmH-Yg-vip"/>
                         <outlet property="phoneNum" destination="bbi-Mc-3sl" id="QCb-MP-LQ2"/>
+                        <segue destination="eYW-Fk-pgP" kind="show" identifier="bindPush" id="bZC-GF-lNg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jst-wC-hNx" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -6057,6 +6058,133 @@
                 <tapGestureRecognizer id="UN9-ts-6pt"/>
             </objects>
             <point key="canvasLocation" x="3263" y="37"/>
+        </scene>
+        <!--Binding Phone View Controller-->
+        <scene sceneID="vKP-IV-cdF">
+            <objects>
+                <viewController storyboardIdentifier="bindPhone" id="eYW-Fk-pgP" customClass="BindingPhoneViewController" customModule="LocalUser" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="DKc-W9-eXA"/>
+                        <viewControllerLayoutGuide type="bottom" id="REP-fm-g9C"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jcZ-zd-IlM">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FxB-Bg-CO6">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NC2-Ki-eHT">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="539"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="绑定账号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XiB-MY-Not">
+                                                <rect key="frame" x="152" y="79" width="70" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u4L-08-nAJ">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Pke-Ef-QpT"/>
+                                                    <constraint firstAttribute="width" constant="50" id="sNJ-3n-KTR"/>
+                                                </constraints>
+                                                <state key="normal" image="nav-back"/>
+                                                <connections>
+                                                    <action selector="backBtnDidClick:" destination="eYW-Fk-pgP" eventType="touchUpInside" id="GRk-ZA-Mio"/>
+                                                    <action selector="backBtnDidClick:" destination="ivJ-dH-bkL" eventType="touchUpInside" id="LXX-if-mAJ"/>
+                                                </connections>
+                                            </button>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入手机号" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JSO-oA-NEJ" customClass="PhoneTextField" customModule="LocalUser" customModuleProvider="target">
+                                                <rect key="frame" x="36" y="140" width="303" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="zjl-bl-S0m"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="leftIcon" value="regist-phone"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </textField>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入验证码" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ccJ-EN-pD9" customClass="CodeTextField" customModule="LocalUser" customModuleProvider="target">
+                                                <rect key="frame" x="36" y="188" width="303" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="cdR-zj-WK6"/>
+                                                </constraints>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="image" keyPath="leftIcon" value="regist-code"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </textField>
+                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dnC-G5-m6a">
+                                                <rect key="frame" x="39" y="292" width="296" height="40"/>
+                                                <color key="backgroundColor" red="0.62352941179999999" green="0.79607843140000001" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="40" id="804-hS-xV1"/>
+                                                </constraints>
+                                                <state key="normal" title="修改">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="nextBtnDidClick:" destination="eYW-Fk-pgP" eventType="touchUpInside" id="ItJ-c6-LLd"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstItem="XiB-MY-Not" firstAttribute="top" secondItem="NC2-Ki-eHT" secondAttribute="top" constant="79" id="0jy-vB-UlY"/>
+                                            <constraint firstItem="JSO-oA-NEJ" firstAttribute="leading" secondItem="NC2-Ki-eHT" secondAttribute="leading" constant="36" id="5ga-Zu-3OI"/>
+                                            <constraint firstItem="ccJ-EN-pD9" firstAttribute="trailing" secondItem="JSO-oA-NEJ" secondAttribute="trailing" id="Bhd-1K-C3q"/>
+                                            <constraint firstItem="ccJ-EN-pD9" firstAttribute="leading" secondItem="JSO-oA-NEJ" secondAttribute="leading" id="Hd7-7a-oFJ"/>
+                                            <constraint firstItem="u4L-08-nAJ" firstAttribute="leading" secondItem="NC2-Ki-eHT" secondAttribute="leading" id="Iyc-7a-osU"/>
+                                            <constraint firstItem="XiB-MY-Not" firstAttribute="centerX" secondItem="NC2-Ki-eHT" secondAttribute="centerX" id="OkP-kE-vdy"/>
+                                            <constraint firstItem="JSO-oA-NEJ" firstAttribute="top" secondItem="XiB-MY-Not" secondAttribute="bottom" constant="40" id="RBt-R2-B9X"/>
+                                            <constraint firstItem="dnC-G5-m6a" firstAttribute="leading" secondItem="NC2-Ki-eHT" secondAttribute="leading" constant="39" id="ZDn-HR-Iql"/>
+                                            <constraint firstItem="dnC-G5-m6a" firstAttribute="top" secondItem="ccJ-EN-pD9" secondAttribute="bottom" constant="64" id="av4-wC-TYC"/>
+                                            <constraint firstItem="u4L-08-nAJ" firstAttribute="top" secondItem="NC2-Ki-eHT" secondAttribute="top" id="c64-P0-dQs"/>
+                                            <constraint firstItem="ccJ-EN-pD9" firstAttribute="top" secondItem="JSO-oA-NEJ" secondAttribute="bottom" constant="8" id="iQ4-10-2gK"/>
+                                            <constraint firstAttribute="trailing" secondItem="JSO-oA-NEJ" secondAttribute="trailing" constant="36" id="iQb-t2-B46"/>
+                                            <constraint firstItem="JSO-oA-NEJ" firstAttribute="centerX" secondItem="XiB-MY-Not" secondAttribute="centerX" id="wRr-eA-T8V"/>
+                                            <constraint firstAttribute="trailing" secondItem="dnC-G5-m6a" secondAttribute="trailing" constant="40" id="yal-Pv-w2S"/>
+                                        </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="qbz-kZ-42P" appends="YES" id="vma-H4-As2"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="NC2-Ki-eHT" firstAttribute="leading" secondItem="FxB-Bg-CO6" secondAttribute="leading" id="H9C-7e-eVM"/>
+                                    <constraint firstItem="NC2-Ki-eHT" firstAttribute="top" secondItem="FxB-Bg-CO6" secondAttribute="top" id="afb-KK-Eva"/>
+                                    <constraint firstAttribute="trailing" secondItem="NC2-Ki-eHT" secondAttribute="trailing" id="ozF-Ot-cYU"/>
+                                    <constraint firstAttribute="bottom" secondItem="NC2-Ki-eHT" secondAttribute="bottom" id="xGY-JI-J0h"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="NC2-Ki-eHT" firstAttribute="width" secondItem="jcZ-zd-IlM" secondAttribute="width" id="2vF-Zt-I6c"/>
+                            <constraint firstItem="FxB-Bg-CO6" firstAttribute="top" secondItem="jcZ-zd-IlM" secondAttribute="topMargin" id="Ct0-wZ-BAP"/>
+                            <constraint firstItem="FxB-Bg-CO6" firstAttribute="leading" secondItem="jcZ-zd-IlM" secondAttribute="leading" id="ELj-KU-DaC"/>
+                            <constraint firstAttribute="trailing" secondItem="FxB-Bg-CO6" secondAttribute="trailing" id="hMI-B5-zrH"/>
+                            <constraint firstItem="NC2-Ki-eHT" firstAttribute="height" secondItem="jcZ-zd-IlM" secondAttribute="height" constant="-64" id="l9M-sF-J9a"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="FxB-Bg-CO6" secondAttribute="bottom" id="xZw-7q-m4P"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <connections>
+                        <outlet property="nextBtn" destination="dnC-G5-m6a" id="rLY-uj-0dt"/>
+                        <outlet property="phoneNum" destination="JSO-oA-NEJ" id="apM-XY-EA3"/>
+                        <outlet property="verifyText" destination="ccJ-EN-pD9" id="AoN-zY-gIR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qn3-hb-bdy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="qbz-kZ-42P"/>
+            </objects>
+            <point key="canvasLocation" x="2585" y="717"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="she-FO-1dg">

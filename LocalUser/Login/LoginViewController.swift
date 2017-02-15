@@ -101,7 +101,12 @@ class LoginViewController: UIViewController, TencentSessionDelegate {
                     UserDefaults.standard.set((dic as! NSDictionary)["user_id"], forKey: "USERID")
                     UserDefaults.standard.set((dic as! NSDictionary)["mnique"], forKey: "MNIQUE")
                     UserDefaults.standard.synchronize()
-                    _ = self.navigationController?.popViewController(animated: true)
+//                    _ = self.navigationController?.popViewController(animated: true)
+                    if ((dic as! NSDictionary)["user_phone"] as! String).characters.count == 0 {
+                        self.navigationController?.pushViewController(BindingPhoneViewController.getInstance(), animated: true)
+                    }else {
+                        _ = self.navigationController?.popToRootViewController(animated: true)
+                    }
                 }else{
                     SVProgressHUD.showError(withStatus: (dic as! NSDictionary)["msg"] as! String)
                 }
