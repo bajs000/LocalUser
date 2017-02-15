@@ -22,6 +22,48 @@ class ShareViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 
+    @IBAction func wxShareBtnDidClick(_ sender: Any) {
+        let message = WXMediaMessage()
+        message.title = "测试"
+        message.description = "测试的啦"
+        message.setThumbImage(UIImage(named: "icon-logo"))
+        
+        let ext = WXWebpageObject()
+        ext.webpageUrl = "http://www.baidu.com"
+        
+        message.mediaObject = ext
+        
+        let req = SendMessageToWXReq.init()
+        req.bText = false
+        req.message = message
+        req.scene = Int32(WXSceneSession.rawValue)
+        
+        WXApi.send(req)
+    }
+    
+    @IBAction func friendShareBtnDidClick(_ sender: Any) {
+        let message = WXMediaMessage()
+        message.title = "测试"
+        message.description = "测试的啦"
+        message.setThumbImage(UIImage(named: "icon-logo"))
+        
+        let ext = WXWebpageObject()
+        ext.webpageUrl = "http://www.baidu.com"
+        
+        message.mediaObject = ext
+        
+        let req = SendMessageToWXReq.init()
+        req.bText = false
+        req.message = message
+        req.scene = Int32(WXSceneTimeline.rawValue)
+        
+        WXApi.send(req)
+    }
+    
+    @IBAction func shortMsgShareBtnDidClick(_ sender: Any) {
+        
+    }
+    
     /*
     // MARK: - Navigation
 

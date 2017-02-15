@@ -92,12 +92,14 @@ class RegistViewController: UIViewController {
                 self.view.layoutIfNeeded()
             })
             bess = "1"
+            userName.placeholder = "请输入商户名"
         }else{
             (sender.superview?.viewWithTag(1) as! UIButton).isSelected = false
             UIView.animate(withDuration: 0.5, animations: {
                 self.detailHeight.constant = 0
                 self.view.layoutIfNeeded()
             })
+            userName.placeholder = "请输入用户名"
             bess = "0"
         }
     }

@@ -13,9 +13,9 @@ class PayViewController: UITableViewController {
 
     @IBOutlet weak var payBtn: UIButton!
     let titleArr:[[String:String]] = [["title":"支付宝支付","icon":"pay-model-0"],
-                                      ["title":"微信支付","icon":"pay-model-1"],
-                                      ["title":"余额支付","icon":"pay-model-2"]]
-    var currentIndexPath:IndexPath?
+                                      ["title":"微信支付","icon":"pay-model-1"]/*,
+                                      ["title":"余额支付","icon":"pay-model-2"]*/]
+    var currentIndexPath:IndexPath = IndexPath(row: 0, section: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class PayViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return titleArr.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,6 +55,17 @@ class PayViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
+    @IBAction func payBtnDidClick(_ sender: Any) {
+        let vc = PayListViewController.getInstance()
+        if self.currentIndexPath.row == 0 {
+            vc.type = .alipay
+        }else{
+            vc.type = .weixin
+        }
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

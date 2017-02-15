@@ -11,3 +11,8 @@
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>
 #import "WXApi.h"
 #import "WXApiObject.h"
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <CommonCrypto/CommonDigest.h>
+#import <AlipaySDK/AlipaySDK.h>
+#import "Order.h"
+#import "DataSigner.h"

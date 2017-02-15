@@ -136,6 +136,8 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
                     self.userInfoBtnDidClick(self.userInfoBarBtn)
                 }
             }
+        }else {
+            self.showMenu = false
         }
     }
     

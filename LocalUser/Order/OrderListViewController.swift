@@ -250,7 +250,7 @@ class OrderListViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = Helpers.findSuperViewClass(UITableViewCell.self, with: sender) as! UITableViewCell
         let indexPath = self.tableView.indexPath(for: cell)
         let dic = self.orderList?[(indexPath?.section)!]
-//        self.performSegue(withIdentifier: "payPush", sender: dic)
+        self.performSegue(withIdentifier: "payPush", sender: dic)
     }
     
     // MARK: - Navigation

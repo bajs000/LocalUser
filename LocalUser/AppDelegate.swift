@@ -15,8 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
 
     var window: UIWindow?
     var _mapManager: BMKMapManager?
-    let kWXAPP_ID = "wx6b2dd79bee84b937"
-    let kWXAPP_SECRET = "1222d0f8f4667a1c2bcf8d7323fe921b"
+    let kWXAPP_ID = "wx20166b5769c1f389"
+    let kWXAPP_SECRET = "db8825b924f56bb8eef517b3523fc567"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SVProgressHUD.setMinimumDismissTimeInterval(1)
@@ -30,15 +30,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
         if ret == false {
             NSLog("manager start failed!")
         }
+        self.setNavigationBarAppearance()
         return true
     }
     
+    func setNavigationBarAppearance() {
+        UINavigationBar.appearance().backIndicatorImage = UIImage(named: "nav-back")
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = UIImage(named: "nav-back")
+//        UINavigationBar.appearance().tintColor = UIColor.white
+//        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName:UIFont.boldSystemFont(ofSize: 17),NSForegroundColorAttributeName:UIColor.white]
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffsetMake(0, -60), for: .default)
+    }
+    
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        return WXApi.handleOpen(url, delegate: self)
+        return (WXApi.handleOpen(url, delegate: self) && TencentOAuth.handleOpen(url))
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        return WXApi.handleOpen(url, delegate: self)
+        if url.absoluteString.hasPrefix("tencent"){
+            return TencentOAuth.handleOpen(url)
+        }else if url.absoluteString.hasPrefix("wx20166b5769c1f389"){
+            return WXApi.handleOpen(url, delegate: self)
+        }else{
+            AlipaySDK.defaultService().processOrder(withPaymentResult: url, standbyCallback: { (resultDic) in
+                print(resultDic ?? "")
+                if Int(resultDic?["resultStatus"] as! String) == 9000 {
+                    let nav = self.window?.rootViewController as! UINavigationController
+                    nav.popToRootViewController(animated: true)
+                }else{
+                    SVProgressHUD.showError(withStatus: "支付失败")
+                }
+            })
+        }
+        return (WXApi.handleOpen(url, delegate: self)  && TencentOAuth.handleOpen(url))
     }
 
     func onResp(_ resp: BaseResp!) {
@@ -63,6 +87,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, BMKGeneralDelegate, WXApi
                     })
                 })
             })
+        }else if resp.isKind(of: PayResp.self) {
+            if resp.errCode == 0 {
+                print("success")
+                let nav = self.window?.rootViewController as! UINavigationController
+                nav.popToRootViewController(animated: true)
+            }else{
+                SVProgressHUD.showError(withStatus: "支付失败")
+            }
         }
     }
     

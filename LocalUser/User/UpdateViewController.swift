@@ -19,14 +19,25 @@ class UpdateViewController: UITableViewController {
 
     var titleArr = [["title":"","detail":"","placeholder":""]]
     var type:UpdateType?
+    var phoneNume:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "修改", style: .plain, target: self, action: #selector(updateBtnDidClick(_:)))
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    public class func getInstance() -> UpdateViewController {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "update")
+        return vc as! UpdateViewController
     }
 
     // MARK: - Table view data source
@@ -74,6 +85,9 @@ class UpdateViewController: UITableViewController {
         }else if type == .password {
             url = "/edit_password"
             dic = ["password":(titleArr[0]["detail"])!,"mnique":UserModel.shareInstance.mnique]
+            if self.phoneNume != nil && (self.phoneNume?.characters.count)! > 0 {
+                dic = ["password":(titleArr[0]["detail"])!,"user_phone":self.phoneNume!]
+            }
         }else if type == .phone {
             url = "/user_edit"
             dic = ["user_phone":(titleArr[0]["detail"])!,"mnique":UserModel.shareInstance.mnique]

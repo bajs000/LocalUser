@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class OrderPayViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -22,6 +23,7 @@ class OrderPayViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func payBtnDidClick(_ sender: Any) {
         
+        self.requestPay()
     }
     
     override func viewDidLoad() {
@@ -32,6 +34,7 @@ class OrderPayViewController: UIViewController, UITableViewDelegate, UITableView
         tempStr.addAttribute(NSForegroundColorAttributeName, value: UIColor.colorWithHexString(hex: "ff9b2b"), range: range)
         self.payLabel.attributedText = tempStr
         self.payBtn.layer.cornerRadius = 16
+        currentIndexPath = IndexPath(row: 0, section: 0)
         // Do any additional setup after loading the view.
     }
 
@@ -75,5 +78,72 @@ class OrderPayViewController: UIViewController, UITableViewDelegate, UITableView
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func requestPay() {
+        SVProgressHUD.show()
+        var payment = "alipay"
+        if currentIndexPath?.row == 0 {
+            payment = "alipay"
+        }else if currentIndexPath?.row == 1 {
+            payment = "wechat"
+        }else{
+            SVProgressHUD.showError(withStatus: "暂未开放")
+            return
+        }
+        NetworkModel.request(["money":(self.payDic?["money"] as! String),"payment":payment,"user_id":UserModel.shareInstance.userId,"pay_type":"1","order_number":(self.payDic?["order_number"] as! String)], url: "/recharge") { (dic) in
+            SVProgressHUD.dismiss()
+            if Int((dic as! NSDictionary)["code"] as! String) == 200 {
+                if self.currentIndexPath?.row == 1 {
+                    let stamp = ((dic as! NSDictionary)["timestamp"] as! NSNumber)
+                    let req = PayReq.init()
+                    req.openID = (dic as! NSDictionary)["appid"] as! String
+                    req.partnerId = (dic as! NSDictionary)["mch_id"] as! String
+                    req.prepayId = (dic as! NSDictionary)["prepay_id"] as! String
+                    req.nonceStr = (dic as! NSDictionary)["nonce_str"] as! String
+                    req.package = "Sign=WXPay"
+                    req.timeStamp = UInt32(stamp.intValue)
+                    
+                    var params:[String:String] = [:]
+                    params["appid"] = req.openID
+                    params["noncestr"] = req.nonceStr
+                    params["package"] = req.package
+                    params["partnerid"] = req.partnerId
+                    params["prepayid"] = req.prepayId
+                    params["timestamp"] = stamp.stringValue
+                    
+                    req.sign = PayListViewController.createMd5Sign(dic: params as NSDictionary)
+                    WXApi.send(req)
+                }else{
+                    let order = Order.init()
+                    order.partner = (dic as! [String:String])["PARTNER"]
+                    order.sellerID = (dic as! [String:String])["SELLER"]
+//                    let dateformatter = DateFormatter.init()
+//                    dateformatter.dateFormat = "yyyyMMddHHmmssSSS"
+//                    let now = Date()
+                    order.outTradeNO = (self.payDic?["order_number"] as! String)
+                    order.subject = (self.payDic?["contact_name"] as! String)
+                    order.body = (self.payDic?["contact_name"] as! String)
+                    order.totalFee = "0.01"
+                    order.notifyURL = (dic as! [String:String])["notifyurl"]
+                    order.service = "mobile.securitypay.pay"
+                    order.paymentType = "1"
+                    order.inputCharset = "utf-8"
+                    order.itBPay = "30m"
+                    
+                    let orderSpec = order.description
+                    let privateKey = (dic as! [String:String])["RSA_PRIVATE"]
+                    let signer = CreateRSADataSigner(privateKey)
+                    let signedString = signer?.sign(orderSpec)
+                    var orderString:String?
+                    if signedString != nil {
+                        orderString = NSString(format: "%@&sign=\"%@\"&sign_type=\"%@\"", orderSpec,signedString!,"RSA") as String
+                        AlipaySDK.defaultService().payOrder(orderString, fromScheme: "alipay20166b5769c1f389", callback: { (resultDic) in
+                            print("aaaaa")
+                        })
+                    }
+                }
+            }
+        }
+    }
 
 }
