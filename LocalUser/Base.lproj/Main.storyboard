@@ -304,8 +304,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="340" height="150"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-user-bg" translatesAutoresizingMaskIntoConstraints="NO" id="8vy-bV-KJv">
-                                        <rect key="frame" x="-5" y="-3" width="345" height="153"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="main-user-bg" translatesAutoresizingMaskIntoConstraints="NO" id="8vy-bV-KJv">
+                                        <rect key="frame" x="0.0" y="0.0" width="340" height="150"/>
                                     </imageView>
                                     <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z6w-kd-BvC">
                                         <rect key="frame" x="135" y="40" width="71" height="71"/>
@@ -348,7 +348,9 @@
                                     <constraint firstItem="Rcu-v0-Ds9" firstAttribute="top" secondItem="5Cz-MO-IJ4" secondAttribute="top" id="Qw3-vf-lX7"/>
                                     <constraint firstItem="Rcu-v0-Ds9" firstAttribute="bottom" secondItem="5Cz-MO-IJ4" secondAttribute="bottom" id="Tpy-eN-pnu"/>
                                     <constraint firstItem="Z6w-kd-BvC" firstAttribute="centerY" secondItem="ogU-pS-nHj" secondAttribute="centerY" id="VAB-Hx-K1h"/>
+                                    <constraint firstItem="8vy-bV-KJv" firstAttribute="top" secondItem="ogU-pS-nHj" secondAttribute="top" id="a7X-Oc-agA"/>
                                     <constraint firstItem="Z6w-kd-BvC" firstAttribute="centerX" secondItem="ogU-pS-nHj" secondAttribute="centerX" id="fby-xw-MQ1"/>
+                                    <constraint firstItem="8vy-bV-KJv" firstAttribute="leading" secondItem="ogU-pS-nHj" secondAttribute="leading" id="lsf-Pe-GM8"/>
                                     <constraint firstAttribute="trailing" secondItem="8vy-bV-KJv" secondAttribute="trailing" id="mGn-mF-3qM"/>
                                     <constraint firstItem="haL-mQ-ZsS" firstAttribute="centerX" secondItem="ogU-pS-nHj" secondAttribute="centerX" id="vIG-nu-0dT"/>
                                 </constraints>

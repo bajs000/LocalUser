@@ -90,7 +90,14 @@ class OrderPayViewController: UIViewController, UITableViewDelegate, UITableView
             SVProgressHUD.showError(withStatus: "暂未开放")
             return
         }
-        NetworkModel.request(["money":(self.payDic?["money"] as! String),"payment":payment,"user_id":UserModel.shareInstance.userId,"pay_type":"1","order_number":(self.payDic?["order_number"] as! String)], url: "/recharge") { (dic) in
+        
+        var orderNum = ""
+        if self.payDic?["order_number"] == nil {
+            orderNum = self.orderId!
+        }else {
+            orderNum = (self.payDic?["order_number"] as! String)
+        }
+        NetworkModel.request(["money":(self.payDic?["money"] as! String),"payment":payment,"user_id":UserModel.shareInstance.userId,"pay_type":"1","order_number":orderNum], url: "/recharge") { (dic) in
             SVProgressHUD.dismiss()
             if Int((dic as! NSDictionary)["code"] as! String) == 200 {
                 if self.currentIndexPath?.row == 1 {
@@ -120,10 +127,10 @@ class OrderPayViewController: UIViewController, UITableViewDelegate, UITableView
 //                    let dateformatter = DateFormatter.init()
 //                    dateformatter.dateFormat = "yyyyMMddHHmmssSSS"
 //                    let now = Date()
-                    order.outTradeNO = (self.payDic?["order_number"] as! String)
-                    order.subject = (self.payDic?["contact_name"] as! String)
-                    order.body = (self.payDic?["contact_name"] as! String)
-                    order.totalFee = "0.01"
+                    order.outTradeNO = orderNum
+                    order.subject = "支付"
+                    order.body = "支付"
+                    order.totalFee = (self.payDic?["money"] as! String)
                     order.notifyURL = (dic as! [String:String])["notifyurl"]
                     order.service = "mobile.securitypay.pay"
                     order.paymentType = "1"
